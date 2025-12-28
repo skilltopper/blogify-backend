@@ -41,18 +41,6 @@ const createUser = async (req, res) => {
 
   await newUser.save();
 
-  await transporter.sendMail({
-    from: `"Blog App" <${process.env.SEMDER_EMAIL}>`,
-    to: email,
-    subject: "Welcome to Blog App",
-    html: `
-      <h1>Welcome to Blog App</h1>
-      <p>Hi ${name},</p>
-      <p>Thank you for registering at Blog App. We are excited to have you on board!</p>
-      <p>Best regards,<br/>Blog App Team</p>
-    `,
-  });
-
   const accessToken = generateAccessToken(newUser._id);
 
   res.cookie("accessToken", accessToken, {
@@ -74,6 +62,18 @@ const createUser = async (req, res) => {
       },
     })
   );
+
+    await transporter.sendMail({
+    from: `"Blog App" <${process.env.SEMDER_EMAIL}>`,
+    to: email,
+    subject: "Welcome to Blog App",
+    html: `
+      <h1>Welcome to Blog App</h1>
+      <p>Hi ${name},</p>
+      <p>Thank you for registering at Blog App. We are excited to have you on board!</p>
+      <p>Best regards,<br/>Blog App Team</p>
+    `,
+  });
 };
 
 const loginUser = async (req, res) => {
@@ -113,18 +113,6 @@ const loginUser = async (req, res) => {
     maxAge: 30 * 60 * 1000, // 30 minutes
   });
 
-  await transporter.sendMail({
-    from: `"Blog App" <${process.env.SEMDER_EMAIL}>`,
-    to: email,
-    subject: "Login Notification",
-    html: `
-      <h1>Login Notification</h1>
-      <p>Hi ${user.name},</p>
-      <p>We noticed a login to your account. If this was you, you can safely ignore this email. If you did not log in, please reset your password immediately.</p>
-      <p>Best regards,<br/>Blog App Team</p>
-    `,
-  });
-
   res.status(201).json(
     new ApiResponse(201, "User logged in successfully", {
       user: {
@@ -137,6 +125,18 @@ const loginUser = async (req, res) => {
       },
     })
   );
+
+    await transporter.sendMail({
+    from: `"Blog App" <${process.env.SEMDER_EMAIL}>`,
+    to: email,
+    subject: "Login Notification",
+    html: `
+      <h1>Login Notification</h1>
+      <p>Hi ${user.name},</p>
+      <p>We noticed a login to your account. If this was you, you can safely ignore this email. If you did not log in, please reset your password immediately.</p>
+      <p>Best regards,<br/>Blog App Team</p>
+    `,
+  });
 };
 
 const logoutUser = async (req, res) => {
